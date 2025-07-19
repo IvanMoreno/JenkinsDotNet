@@ -1,15 +1,11 @@
 pipeline {
     agent any
     
-    environment {
-        REPO_URL = "https://github.com/IvanMoreno/JenkinsDotNet.git"
-    }
-    
     stages {
         stage('Checkout') {
             steps {
                 cleanWs()
-                bat "git clone ${REPO_URL} ."
+                bat "git clone https://github.com/IvanMoreno/JenkinsDotNet.git ."
             }
         }
         
