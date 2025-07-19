@@ -9,6 +9,12 @@ pipeline {
             }
         }
         
+        stage('Test') {
+            steps {
+                bat "dotnet test --configuration Release --no-build --logger trx --results-directory TestResults"
+            }
+        }
+        
         stage('Restore') {
             steps {
                 bat "dotnet restore"
@@ -21,17 +27,10 @@ pipeline {
             }
         }
         
-        stage('Test') {
-            steps {
-                bat "dotnet test --configuration Release --no-build --logger trx --results-directory TestResults"
-            }
-        }
-        
         stage('Publish') {
             steps {
                 bat """
-                    if not exist "Publish" mkdir "Publish"
-                    dotnet publish --configuration Release --no-build --output "Publish\\JenkinsTest" --framework net6.0
+                    dotnet publish --configuration Release --no-build --output "Publish" --framework net6.0
                 """
                 archiveArtifacts artifacts: 'Publish/**/*', fingerprint: true
             }
