@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     parameters {
-        choice(name: 'BUILD_CONFIG', choices: ['Release', 'Debug'], description: 'Build configuration')
         choice(name: 'TARGET_FRAMEWORK', choices: ['net6.0', 'net8.0', 'netcoreapp3.1'], description: 'Target framework')
     }
     
@@ -27,13 +26,13 @@ pipeline {
         
         stage('Build') {
             steps {
-                bat "dotnet build --configuration ${params.BUILD_CONFIG} --no-restore"
+                bat "dotnet build --configuration Release --no-restore"
             }
         }
         
         stage('Test') {
             steps {
-                bat "dotnet test --configuration ${params.BUILD_CONFIG} --no-build --logger trx --results-directory TestResults"
+                bat "dotnet test --configuration Release --no-build --logger trx --results-directory TestResults"
             }
         }
         
@@ -41,7 +40,7 @@ pipeline {
             steps {
                 bat """
                     if not exist "Publish" mkdir "Publish"
-                    dotnet publish --configuration ${params.BUILD_CONFIG} --no-build --output "Publish\\JenkinsTest" --framework ${params.TARGET_FRAMEWORK}
+                    dotnet publish --configuration Release --no-build --output "Publish\\JenkinsTest" --framework ${params.TARGET_FRAMEWORK}
                 """
                 archiveArtifacts artifacts: 'Publish/**/*', fingerprint: true
             }
