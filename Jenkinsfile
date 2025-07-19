@@ -40,7 +40,6 @@ pipeline {
                 bat """
                     dotnet test --configuration ${params.BUILD_CONFIG} --no-build --logger trx --results-directory TestResults
                 """
-                publishTestResults testResultsPattern: 'TestResults/*.trx'
             }
         }
         
