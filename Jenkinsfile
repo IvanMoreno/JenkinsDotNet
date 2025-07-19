@@ -9,7 +9,6 @@ pipeline {
     
     environment {
         DOTNET_ROOT = "C:\\Program Files\\dotnet"
-        PATH = "${DOTNET_ROOT};${env.PATH}"
         REPO_URL = "https://github.com/IvanMoreno/JenkinsDotNet.git"
     }
     
@@ -29,17 +28,13 @@ pipeline {
         
         stage('Build') {
             steps {
-                bat """
-                    dotnet build --configuration ${params.BUILD_CONFIG} --no-restore -p:Version=${params.BUILD_VERSION}
-                """
+                bat "dotnet build --configuration ${params.BUILD_CONFIG} --no-restore -p:Version=${params.BUILD_VERSION}"
             }
         }
         
         stage('Test') {
             steps {
-                bat """
-                    dotnet test --configuration ${params.BUILD_CONFIG} --no-build --logger trx --results-directory TestResults
-                """
+                bat "dotnet test --configuration ${params.BUILD_CONFIG} --no-build --logger trx --results-directory TestResults"
             }
         }
         
